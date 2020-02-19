@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ControlSettings</title>
+	
+
+ </head>
+ <body >
+   <form id="settings" action='/settings' method='POST'>
+      <div class="header">
+       <div>
+         <img id="logo" src="logo.png"></img>
+         <br>
+       </div>
+       <div class="sep"></div>
+       <h3>Control Settings</h3>       
+       <p>You need to fill out this form</p>    
+      </div>
+         
+      <div class="sep"></div>
+      <div class="inputs">
+        <input id="mqtt_hostname" type="textfield" name='mqtt_hostname' value = "" placeholder="MQTT Hostname" autofocus maxlength="50"/>     
+        <input id="username" type="textfield" name='username' value = "" placeholder="username" autofocus maxlength="50"/>
+        <input id="password" type="password" name='password' value = "" placeholder="password" autofocus maxlength="50"/>
+        <input id="sub" type="textfield" name='subscribe' value = "" placeholder="Subscribe topic" autofocus maxlength="50"/>
+        <input id="status_topic" type="textfield" name='status_topic' value = "" placeholder="Status Topic" autofocus maxlength="50"/> 
+        <input id="on_message" type="textfield" name='on_message' value = "" placeholder="On Message" autofocus maxlength="10"/>   
+		<input id="off_message" type="textfield" name='off_message' value = "" placeholder="Off Message" autofocus maxlength="10"/>   
+        <input id='submit' type='submit' name='SUBMIT' value='Submit' />              
+      </div>
+    </form>
+</form>
+<script>
+/**
+ *  fill the "/settings" form with  previous set settings
+ *  example for the expected response 
+ *  {"id":"111001","ssid":"your_ssid","sspsk":"your_sspsk","hn":"mqtt1.senate.org.nz", "un":amr, "pass":"thediylife","pub":"topic1",
+ *  sub:"topic2","fw_hn":"http://www.the-diy-life.co","fw_pt":80,"fw_inv":60}
+*/
+function loadValues(url){
+   console.log("sending the request");
+  var xh = new XMLHttpRequest();
+		xh.onreadystatechange = function(){
+		  if (xh.readyState == 4){
+			  console.log("readyState");
+			  if(xh.status == 200) {
+			     console.log("status");
+			     console.log(xh.responseText);
+          var res = JSON.parse(xh.responseText);
+          console.log(res.toString());         
+          document.getElementById("mqtt_hostname").value=res["hn"];  
+          document.getElementById("username").value=res["un"];
+          document.getElementById("password").value=res["pass"];
+          document.getElementById("sub").value=res["sub"];
+          document.getElementById("status_topic").value=res["st_topic"];         
+		  document.getElementById("on_message").value=res["onmes_topic"];
+		  document.getElementById("off_message").value=res["ofmes_topic"];
+			  }
+			}
+		};
+  xh.open("GET", url, true);
+  xh.send(null);
+};
+</script>
+ </body>
+</html>

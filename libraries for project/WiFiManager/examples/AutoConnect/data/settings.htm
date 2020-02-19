@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ControlSettings</title>
+<link href="style.css" rel="stylesheet" />
+	
+
+ </head>
+ <body onload="loadValues();">
+<div class="container">
+    <form id="settings" action='/settings' method='POST'>
+      <div class="header">
+       <div>
+         <img id="logo" src="logo.png"></img>
+         <br>
+       </div>
+       <div class="sep"></div>
+       <h3>Control Settings</h3>       
+       <p>You need to fill out this form</p>    
+      </div>
+         
+      <div class="sep"></div>
+      <div class="inputs">
+        <input id="id" type="textfield" name='id' value = "" placeholder="Controller ID" autofocus maxlength="6"/>
+        <input id="ssid" type="textfield" name='ssid' value = "" placeholder="SSID name" autofocus maxlength="100"/> 
+        <input id="sspsk" type="password" name='sspsk' value = "" placeholder="sspsk" autofocus maxlength="100"/>       
+        <input id="mqtt_hostname" type="textfield" name='mqtt_hostname' value = "" placeholder="MQTT Hostname" autofocus maxlength="50"/>     
+        <input id="username" type="textfield" name='username' value = "" placeholder="username" autofocus maxlength="50"/>
+        <input id="password" type="password" name='password' value = "" placeholder="password" autofocus maxlength="50"/>
+        <input id="sub" type="textfield" name='subscribe' value = "" placeholder="Subscribe topic" autofocus maxlength="50"/>
+		<input id="pub" type="textfield" name='publish' value = "" placeholder="Publish Topic" autofocus maxlength="50"/> 
+        <input id="status_topic" type="textfield" name='status_topic' value = "" placeholder="Status Topic" autofocus maxlength="50"/>   
+		<input id="external_input_topic" type="textfield" name='external_input_topic' value = "" placeholder="External Input Topic" autofocus maxlength="50"/>   
+		<input id="on_message" type="textfield" name='on_message' value = "" placeholder="On Message" autofocus maxlength="10"/>   
+		<input id="off_message" type="textfield" name='off_message' value = "" placeholder="Off Message" autofocus maxlength="10"/>   
+        <input id="fwu_udt_hostname" type="textfield" name='fwu_udt_hostname' value = "" placeholder="FW Update hostname" autofocus maxlength="100"/>
+        <input id="fwu_udt_port" type="number" name='fwu_udt_port' value = "" placeholder="FW Update port" autofocus /> 
+        <input id="fwu_udt_inv" type="number" name='fwu_udt_inv' value = "" placeholder="FW Update Interval In Minutes" autofocus />              
+        <input id='submit' type='submit' name='SUBMIT' value='Submit' />  
+        <a href="/index.htm" class="button" >Home</a>  
+        <a href="/credentials.htm" class="button" >Change Credentials</a>  
+        <a href="/logout" class="button" >Log Out</a>  
+      </div>
+    </form>
+</div>
+<script>
+/**
+ *  fill the "/settings" form with  previous set settings
+ *  example for the expected response 
+ *  {"id":"111001","ssid":"your_ssid","sspsk":"your_sspsk","hn":"mqtt1.senate.org.nz", "un":amr, "pass":"thediylife","pub":"topic1",
+ *  sub:"topic2","fw_hn":"http://www.the-diy-life.co","fw_pt":80,"fw_inv":60}
+*/
+function loadValues(){
+  // console.log("Test");
+  var xh = new XMLHttpRequest();
+		xh.onreadystatechange = function(){
+		  if (xh.readyState == 4){
+			  //console.log("readyState");
+			  if(xh.status == 200) {
+			    // console.log("status");
+			    // console.log(xh.responseText);
+          var res = JSON.parse(xh.responseText);
+          console.log(res.toString());
+          document.getElementById("id").value=res["id"]; 
+          document.getElementById("ssid").value=res["ssid"];
+          document.getElementById("sspsk").value=res["sspsk"];
+          document.getElementById("mqtt_hostname").value=res["hn"];  
+          document.getElementById("username").value=res["un"];
+          document.getElementById("password").value=res["pass"];
+          document.getElementById("sub").value=res["sub"]; 
+
+          document.getElementById("pub").value=res["pub"];
+		  
+          document.getElementById("status_topic").value=res["st_topic"];
+		  document.getElementById("external_input_topic").value=res["exin_topic"];
+		  document.getElementById("on_message").value=res["onmes_topic"];
+		  document.getElementById("off_message").value=res["ofmes_topic"];
+          document.getElementById("fwu_udt_hostname").value=res["fw_hn"];
+          document.getElementById("fwu_udt_port").value=res["fw_pt"];
+          document.getElementById("fwu_udt_inv").value=res["fw_inv"];       
+			  }
+			}
+		};
+  xh.open("GET", "/getSettings", true);
+  xh.send(null);
+};
+</script>
+ </body>
+</html>

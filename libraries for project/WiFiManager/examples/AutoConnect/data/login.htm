@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ControlSettings</title>
+<link href="style.css" rel="stylesheet" />
+	
+
+ </head>
+ <body onload="loadValues();">
+<div class="container">
+    <form id="settings" action='/login' method='POST'>
+      <div class="header">
+       <div>
+         <img id="logo" src="logo.png"></img>
+         <br>
+       </div>
+       <div class="sep"></div>
+       <h3>Login </h3>
+       <p> Please Enter Your username and password</p>        
+      </div>
+         
+      <div class="sep"></div>
+      <div class="inputs">
+        <input  type="textfield" name='USERNAME' value = "" placeholder="UserName" autofocus maxlength="20"/>
+        <input  type="password" name='PASSWORD' value = "" placeholder="password" autofocus maxlength="50"/>           
+        <input id='submit' type='submit' name='SUBMIT' value='Login' />        
+      </div>
+    </form>
+</div>
+</body>
+</html>

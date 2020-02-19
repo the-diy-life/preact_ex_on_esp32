@@ -1,0 +1,4 @@
+*.bat
+compile.sh
+*.bin
+.vscode

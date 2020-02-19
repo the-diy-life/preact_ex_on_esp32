@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ControlSettings</title>
+<link href="style.css" rel="stylesheet" />
+</head>
+<body onload="onLoadCallback();">
+  <div class="container">
+    <div id= "settings">
+      <div class="header">
+       <div>
+         <img id="logo" src="logo.png"></img>
+         <br>
+       </div>
+       <div class="sep"></div>
+       <h3>Smart RF Controller</h3> 
+       <h4>Last Records</h4>          
+      </div>        
+      <div class="sep"></div>
+      <br/><br/>
+      <div id= "LastREC"></div>
+      <br/><br/>
+      <a href="/index.htm" class="button" >Home</a> 
+      <a href="/settings.htm" class="button" >Settings</a>
+      <a href="/logout" class="button" >Log Out</a>
+    </div>
+  </div>
+<script>
+/**
+ * Called when Body tag loads.. to initialize different spans frequently
+*/
+let  onLoadCallback = ()=>
+{
+ loadValues();
+ setInterval(loadValues,5000);
+}
+/**
+ * Fill the Settings div with information from the board, like Firmware version, WiFi Strength, 
+ * MQTT Connection status etc.
+ * It sends a request to the server /getParametes. and the reply should be parsed as JSON
+ * {"FWV":"1.0.0","WiFi":"4%","MQTT":"Connected"}
+ * FWV stands for Firmware version , WiFi stands for WiFi Strength , 
+ * MQTT stands for MQTT connectivity
+*/
+
+function loadValues(){
+  //console.log("Test");
+  var xh = new XMLHttpRequest();
+		xh.onreadystatechange = function(){
+		  if (xh.readyState == 4){
+			  //console.log("readyState");
+			  if(xh.status == 200) {
+			    // console.log("status");
+			    console.log(xh.responseText);
+
+          document.getElementById("LastREC").innerHTML = xh.responseText;
+          if(!xh.responseText.length)
+            document.getElementById("LastREC").innerHTML = "No Records So Far."
+			  }
+			}
+		};
+  xh.open("GET", "/lastrec", true);
+  xh.send(null);
+};
+
+
+</script>
+ </body>
+</html>
