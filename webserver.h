@@ -7,5 +7,6 @@ void get_settings(AsyncWebServerRequest *request);
 void set_settings(AsyncWebServerRequest *request);
 void get_temp_reading(AsyncWebServerRequest *request);
 void get_acc_reading(AsyncWebServerRequest *request);
+//void set_settings_json(AsyncWebServerRequest *request);
 
 #endif

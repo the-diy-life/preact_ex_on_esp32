@@ -1,7 +1,7 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#define ANALOG_PIN                15
+#define ANALOG_PIN                34 //  15
 
 #define DEBUG
 

@@ -11,7 +11,7 @@
 
 //const int analog_pin = 15;
 
-int RawValue = 0;
+int RawValue = 1400;
 double Voltage = 0;
 double tempC = 0;
 double tempF = 0;
@@ -28,14 +28,20 @@ void setup() {
   setup_wifi();
   spiffs_init();
   webserver_init();
+  adxl345_init();
 }
 
 void loop() {
   
   RawValue = analogRead(ANALOG_PIN);
+  DEBUG_PRINT("RawValue: ");
+  DEBUG_PRINTLN(RawValue);
+//  delay(1000);
   Voltage = (RawValue / 2048.0) * 3300; // 5000 to get millivots.
   tempC = Voltage * 0.1;
   tempF = (tempC * 1.8) + 32; // conver to F
+  DEBUG_PRINT("temprature: ");
+  DEBUG_PRINTLN(tempC);
   read_acceleration();  
 }
 
@@ -52,6 +58,12 @@ void webserver_init(void) {
 //        request->send(200, "text/plain", "Hello, world");
 //        });  
   // send the json string that came from fsparameters to the server
+
+  /*server.on("/header", HTTP_GET, [](AsyncWebServerRequest *request){
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Ok");
+    response->addHeader("Test-Header", "My header value");
+    request->send(response);
+  });*/
   async_server.on("/getSettings", HTTP_GET, get_settings);
   
   // Get the new data from server.

@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
-
+#include "AsyncJson.h"
+#include "ArduinoJson.h"
 #include "webserver.h"
 #include "main.h"
 #include "fsparameter.h"
@@ -11,7 +12,7 @@ extern int RawValue;
 extern float acc_x;   // ADXL345 Accelerometer X value
 extern float acc_y;   // ADXL345 Accelerometer Y value
 extern float acc_z;   // ADXL345 Accelerometer Z value
-int order;
+int order = 1;
 
 /*
   for server if not found page
@@ -34,7 +35,10 @@ void get_temp_reading(AsyncWebServerRequest *request) {
   DEBUG_PRINTLN("\n Sending Temprature reading");
   DEBUG_PRINTLN(json);
   // send the json
-  request->send(200, "text/json", json);
+//  request->send(200, "text/json", json);
+  AsyncWebServerResponse *response = request->beginResponse(200, "text/json", json);
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 /**
@@ -55,7 +59,10 @@ void get_acc_reading(AsyncWebServerRequest *request) {
   DEBUG_PRINTLN("\n Sending Accelerometer reading");
   DEBUG_PRINTLN(json);
   // send the json
-  request->send(200, "text/json", json);
+//  request->send(200, "text/json", json);
+  AsyncWebServerResponse *response = request->beginResponse(200, "text/json", json);
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 /**
@@ -71,8 +78,10 @@ void get_settings(AsyncWebServerRequest *request) {
            system_settings.interval_time, system_settings.Enable, system_settings.api_key,
            system_settings.field1, system_settings.field2, system_settings.field3, system_settings.field4);
   // send the json
-  request->send(200, "text/json", json);
-  //  webserver.send(200, "text/json", json);
+//  request->send(200, "text/json", json);
+  AsyncWebServerResponse *response = request->beginResponse(200, "text/json", json);
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 
   DEBUG_PRINTLN("\n Sending get_settings");
   DEBUG_PRINTLN(json);
@@ -149,17 +158,39 @@ void set_settings(AsyncWebServerRequest *request) {
       }
     }
     writeFSParameters();
-    return request->send(SPIFFS, "/success.htm", "text/html");
+//    return request->send(SPIFFS, "/success.htm", "text/html");
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Ok");
+    response->addHeader("Access-Control-Allow-Origin", "*");
+    request->send(response);
     }
   }
-
+  
+/*
+void set_settings_json(AsyncWebServerRequest *request){
+  
+  async_server.onRequestBody([](AsyncWebServerRequest * request, uint8_t *data, size_t len, size_t index, size_t total) {
+    Serial.println("Running");
+    if (request->url() == "/settings") {
+      StaticJsonDocument<256> jsonBuffer;
+      JsonObject& root = jsonBuffer.to<JsonObject>(data);
+      DeserializationError error = deserializeJson(jsonBuffer, json);
+      if (!error) {
+        if (root.containsKey("IT")) {
+          Serial.println(root["IT"].asString()); // 1
+        }
+      }
+      request->send(200, "text/plain", "end");
+    }
+  });
+}
+*/
   /**
    /getOrder route. this handles the order comes from website to turn on/off led connected to the controller.
    current parameters handled "order"
 */
 void get_order(AsyncWebServerRequest *request) {
 
-  DEBUG_PRINT("Settings...");
+  DEBUG_PRINT("Order...");
   String retFileName = "/index.htm";
   int paramsNr = request->params();
   String val;
@@ -169,7 +200,7 @@ void get_order(AsyncWebServerRequest *request) {
 
   if (paramsNr >= 1)
   {
-    for (int i = 0; i < paramsNr - 1; i++) {
+    for (int i = 0; i <= paramsNr - 1; i++) {
       AsyncWebParameter* p = request->getParam(i);
 
       DEBUG_PRINTLN("In response arg is: " );
@@ -186,8 +217,10 @@ void get_order(AsyncWebServerRequest *request) {
         DEBUG_PRINTLN(order);
       }    
     }
-    return request->send(SPIFFS, "/success.htm", "text/html");
-
+//    return request->send(SPIFFS, "/success.htm", "text/html");
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Ok");
+    response->addHeader("Access-Control-Allow-Origin", "*");
+    request->send(response);
   }
 }
   

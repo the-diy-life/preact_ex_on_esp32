@@ -9,9 +9,9 @@
 /* Assign a unique ID to this sensor at the same time */
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
-float acc_x;   // ADXL345 Accelerometer X value
-float acc_y;   // ADXL345 Accelerometer Y value
-float acc_z;   // ADXL345 Accelerometer Z value
+float acc_x = 1340;   // ADXL345 Accelerometer X value
+float acc_y = 3453;   // ADXL345 Accelerometer Y value
+float acc_z = 1230;   // ADXL345 Accelerometer Z value
 
 /*
  * Display sensor information.
@@ -157,9 +157,10 @@ void read_acceleration(void)
  
   
   /* Display the results (acceleration is measured in m/s^2) */
-//  DEBUG_PRINT("X: "); DEBUG_PRINT(event.acceleration.x); DEBUG_PRINT("  ");
-//  DEBUG_PRINT("Y: "); DEBUG_PRINT(event.acceleration.y); DEBUG_PRINT("  ");
-//  DEBUG_PRINT("Z: "); DEBUG_PRINT(event.acceleration.z); DEBUG_PRINT("  "); DEBUG_PRINTLN("m/s^2 ");
+  DEBUG_PRINT("X: "); DEBUG_PRINT(event.acceleration.x); DEBUG_PRINT("  ");
+  DEBUG_PRINT("Y: "); DEBUG_PRINT(event.acceleration.y); DEBUG_PRINT("  ");
+  DEBUG_PRINT("Z: "); DEBUG_PRINT(event.acceleration.z); DEBUG_PRINT("  "); DEBUG_PRINTLN("m/s^2 ");
+  delay(1000);
   acc_x = event.acceleration.x;
   acc_y = event.acceleration.y;
   acc_z = event.acceleration.z; 
