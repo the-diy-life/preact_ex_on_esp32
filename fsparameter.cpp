@@ -13,14 +13,17 @@ struct settings system_settings;
 // check if config file exist
 int conf_exist = 0;
 
-void spiffs_init(){
-  // start the flash file system
+/*
+* Start the flash file system, open it's directory, and list the files in it.
+* Check for the config.json file and if it not exist make it, and write the parameters to it.
+*/
+void spiffs_init() {
   if (!SPIFFS.begin(true)) {
     Serial.println("Failed to mount file system");
     return;
   }
 
-  // list SPIFFS contents
+  // List SPIFFS contents
   File root = SPIFFS.open("/");
   if (!root) {
     Serial.println("- failed to open directory");
@@ -38,8 +41,7 @@ void spiffs_init(){
     } else {
       DEBUG_PRINT("  FILE: ");
       DEBUG_PRINT(file.name());
-      if (strcmp(file.name(), "/config.json") == 0)
-      {
+      if (strcmp(file.name(), "/config.json") == 0) {
         conf_exist = 1;
         DEBUG_PRINT("\tconfig file exist");
       }
@@ -49,18 +51,19 @@ void spiffs_init(){
     file = root.openNextFile();
   }
 
-  // check if configuration file exist and if true read settings structure from it else write to implement it
-  if (conf_exist == 1)
-  {
+  /* Check if configuration file exist and if true read settings structure from it. 
+  *Else write to implement it
+  */
+  if (conf_exist == 1) {
     readFSParameters();
   }
-  else
-  {
+  else {
     DEBUG_PRINTLN("create and write to config file");
     writeFSParameters();
   }
 
 }
+
 /**
     write the SPIFFS parameters, for our case they are:
     interval_time
@@ -73,8 +76,8 @@ void spiffs_init(){
 */
 void writeFSParameters(void) {
 
-  //save the custom parameters to FS
-  //if (shouldSaveConfig) {
+  //  save the custom parameters to FS
+  //  if (shouldSaveConfig) {
   Serial.println("saving config");
   DynamicJsonDocument doc(1024);
   JsonObject json = doc.to<JsonObject>();

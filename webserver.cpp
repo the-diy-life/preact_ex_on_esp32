@@ -164,26 +164,8 @@ void set_settings(AsyncWebServerRequest *request) {
     request->send(response);
     }
   }
-  
-/*
-void set_settings_json(AsyncWebServerRequest *request){
-  
-  async_server.onRequestBody([](AsyncWebServerRequest * request, uint8_t *data, size_t len, size_t index, size_t total) {
-    Serial.println("Running");
-    if (request->url() == "/settings") {
-      StaticJsonDocument<256> jsonBuffer;
-      JsonObject& root = jsonBuffer.to<JsonObject>(data);
-      DeserializationError error = deserializeJson(jsonBuffer, json);
-      if (!error) {
-        if (root.containsKey("IT")) {
-          Serial.println(root["IT"].asString()); // 1
-        }
-      }
-      request->send(200, "text/plain", "end");
-    }
-  });
-}
-*/
+
+
   /**
    /getOrder route. this handles the order comes from website to turn on/off led connected to the controller.
    current parameters handled "order"
@@ -198,14 +180,12 @@ void get_order(AsyncWebServerRequest *request) {
   DEBUG_PRINT("paramsNr: ");
   DEBUG_PRINTLNDEC(paramsNr);
 
-  if (paramsNr >= 1)
-  {
+  if (paramsNr >= 1) {
     for (int i = 0; i <= paramsNr - 1; i++) {
       AsyncWebParameter* p = request->getParam(i);
 
-      DEBUG_PRINTLN("In response arg is: " );
+      DEBUG_PRINTLN("In response arg is: ");
       if (p->name() == "submit") {
-
         DEBUG_PRINT("submit arg:\t");
         DEBUG_PRINTLN(p->value());
       }
@@ -215,7 +195,7 @@ void get_order(AsyncWebServerRequest *request) {
         order = val.toInt();
         // p->value().toInt(order, 50);
         DEBUG_PRINTLN(order);
-      }    
+      }   
     }
 //    return request->send(SPIFFS, "/success.htm", "text/html");
     AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Ok");
@@ -223,4 +203,3 @@ void get_order(AsyncWebServerRequest *request) {
     request->send(response);
   }
 }
-  

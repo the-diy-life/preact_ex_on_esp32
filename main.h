@@ -1,10 +1,11 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#define ANALOG_PIN                34 //  15
+#define ANALOG_PIN                34  //  15
+#define SSID                      "WE_B747A0"
+#define PASSWORD                  "k6518520"
 
 #define DEBUG
-
 
 #ifdef DEBUG
 #define DEBUG_PRINT(x)           Serial.print (x)

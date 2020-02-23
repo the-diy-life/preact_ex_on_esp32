@@ -2,14 +2,12 @@
 #include <WebServer.h>
 #include "SPIFFS.h"
 #include <ESPAsyncWebServer.h>
-#include <WiFi.h> // Load Wi-Fi library
+#include <WiFi.h> //  Load Wi-Fi library
 
 #include "webserver.h"
 #include "adxl345.h"
 #include "main.h"
 #include "fsparameter.h"
-
-//const int analog_pin = 15;
 
 int RawValue = 1400;
 double Voltage = 0;
@@ -32,16 +30,18 @@ void setup() {
 }
 
 void loop() {
-  
+  /*Get analog value and calc it to get the temprature in C and F*/
   RawValue = analogRead(ANALOG_PIN);
   DEBUG_PRINT("RawValue: ");
   DEBUG_PRINTLN(RawValue);
-//  delay(1000);
+  
   Voltage = (RawValue / 2048.0) * 3300; // 5000 to get millivots.
   tempC = Voltage * 0.1;
   tempF = (tempC * 1.8) + 32; // conver to F
+  // If debug is define write the temprature in serial.
   DEBUG_PRINT("temprature: ");
   DEBUG_PRINTLN(tempC);
+  /*Call the function that read accelerometer values.*/
   read_acceleration();  
 }
 
@@ -54,16 +54,6 @@ void webserver_init(void) {
   */
   async_server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.htm");
 
-//  async_server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-//        request->send(200, "text/plain", "Hello, world");
-//        });  
-  // send the json string that came from fsparameters to the server
-
-  /*server.on("/header", HTTP_GET, [](AsyncWebServerRequest *request){
-    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Ok");
-    response->addHeader("Test-Header", "My header value");
-    request->send(response);
-  });*/
   async_server.on("/getSettings", HTTP_GET, get_settings);
   
   // Get the new data from server.
@@ -84,23 +74,19 @@ void webserver_init(void) {
 /**
   function to start the WiFi connection
 */
-void setup_wifi()
-{
+void setup_wifi(){
   delay(10);
   /* We start by connecting to a WiFi network */
   Serial.println();
   Serial.print("Connecting ");
 
-
-  //WiFi.begin(ssid, password);
-  WiFi.begin("WE_B747A0", "k6518520");
+  /*Use the ssid and password to connect to WiFi*/
+  WiFi.begin(SSID, PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-
-//  randomSeed(micros());
-
+  /*After connect to wifi write the IP address in serial*/
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
