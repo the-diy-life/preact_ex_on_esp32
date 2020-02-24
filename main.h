@@ -5,7 +5,7 @@
 #define SSID                      "WE_B747A0"
 #define PASSWORD                  "k6518520"
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 #define DEBUG_PRINT(x)           Serial.print (x)
