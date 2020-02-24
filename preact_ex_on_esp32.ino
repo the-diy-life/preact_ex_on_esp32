@@ -52,7 +52,6 @@ void webserver_init(void) {
   /*
     server handle requests
   */
-  async_server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.htm");
 
   async_server.on("/getSettings", HTTP_GET, get_settings);
   
@@ -65,7 +64,10 @@ void webserver_init(void) {
 
   async_server.on("/getAccReading", HTTP_GET, get_acc_reading);
 
+  async_server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.htm");
+  
   async_server.onNotFound(notFound);
+  
 
   // Start server
   async_server.begin();

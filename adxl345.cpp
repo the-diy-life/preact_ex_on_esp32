@@ -160,7 +160,10 @@ void read_acceleration(void)
   DEBUG_PRINT("X: "); DEBUG_PRINT(event.acceleration.x); DEBUG_PRINT("  ");
   DEBUG_PRINT("Y: "); DEBUG_PRINT(event.acceleration.y); DEBUG_PRINT("  ");
   DEBUG_PRINT("Z: "); DEBUG_PRINT(event.acceleration.z); DEBUG_PRINT("  "); DEBUG_PRINTLN("m/s^2 ");
+  #ifdef DEBUG
   delay(1000);
+  #endif
+
   acc_x = event.acceleration.x;
   acc_y = event.acceleration.y;
   acc_z = event.acceleration.z; 
