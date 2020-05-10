@@ -18,9 +18,9 @@ int order = 1;
   for server if not found page
   @param *request AsyncWebServerRequest
 */
-void notFound(AsyncWebServerRequest *request) {
-
-  request->send(404, "text/plain", "Not found");
+void notFound(AsyncWebServerRequest *request) { 
+  request->redirect("index.htm");
+//  request->send(404, "text/plain", "Not found");
 }
 
 /**
